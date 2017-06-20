@@ -44,6 +44,24 @@ function deliver_response($format, $api_response){
 		header('Content-Type: application/json; charset=utf-8');
 		// TODO: Should not allow all origins
 		header('Access-Control-Allow-Origin: *');
+		
+		// Adressing the TODO
+		// The above line is unsafe, * is a wildcard and allows cross site scripting from every domain
+		// Fix by making a list of trusted domains and protocols
+		// (The 2nd parameter "false" tells the header() function not to overwrite the old one)
+		// header('Access-Control-Allow-Origin: http://mysite1.com', false);
+ 		// header('Access-Control-Allow-Origin: http://example.com', false);
+ 		// header('Access-Control-Allow-Origin: https://www.mysite2.com', false);
+ 		// header('Access-Control-Allow-Origin: http://www.mysite2.com', false);
+		
+		// Allowing access from other locations then your own trusted site allows for session highjacking. 
+		// I'm going to go with a little example - image Facebook allows a wildcard origin - 
+		// this means that you can make your own website somewhere, and make it fire AJAX calls (or open iframes) to facebook.
+		// This means you can grab the logged in info of the facebook of a visitor of your website.
+		// Even worse - you can script POST requests and post data on someone's facebook - 
+		// just while they are browsing your website.
+		
+		// Adapted from https://stackoverflow.com/questions/7564832/how-to-bypass-access-control-allow-origin
 
 		// Format data into a JSON response
 		$json_response = json_encode($api_response);
